@@ -11,4 +11,4 @@ class Users(Base):
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
     create_date = Column(DateTime, nullable=False)
-    discription = Column(Text, nullable=True)
+    description = Column(Text, nullable=True)

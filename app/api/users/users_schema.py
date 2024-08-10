@@ -10,9 +10,23 @@ class UserCreateRequest(BaseModel):
     user_name: str
     email: EmailStr
     password: str
-    discription: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None)
     is_confirmed: bool = Field(default=False)
-    create_date: datetime = Field(default_factory=datetime.now)
+    create_date: datetime = Field(default_factory=datetime.utcnow)
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "user_name": "a",
+                    "email": "a@a.com",
+                    "password": "a",
+                    "description": "A very nice Item",
+                    "is_confirmed": True
+                }
+            ]
+        }
+    }
 
     @field_validator('password', mode='before')
     def hash_password(cls, value: str) -> str:
@@ -35,8 +49,15 @@ class UserReadRequest(BaseModel):
 
 
 class UserLoginRequest(BaseModel):
-    user_name: str
+    email: EmailStr
     password: str
+
+
+class UserLoginResponse(BaseModel):
+    cuid: str
+    access_token: str
+    token_type: str
+    email: EmailStr
 
 
 class UserDeleteRequest(BaseModel):
@@ -51,6 +72,14 @@ class UserUpdateRequest(BaseModel):
     user_name: Optional[str]
     email: Optional[EmailStr]
     password: Optional[str]
+    description: Optional[str]
+
+
+class UserUpdateRseponse(BaseModel):
+    cuid: str
+    user_name: str
+    email: str
+    description: str
 
 # # 사용 예시
 # new_user = UserCreate(user_name="testuser", email="e@x.com", password="mypassword", is_confirmed=True)
